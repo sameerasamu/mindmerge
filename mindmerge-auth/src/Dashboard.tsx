@@ -74,6 +74,28 @@ export default function Dashboard() {
           </li>
 
           <li
+            onClick={() => navigate("/templates")}
+            className={`cursor-pointer p-3 rounded-lg ${
+              location.pathname === "/templates"
+                ? "bg-green-500 text-black font-bold"
+                : "hover:bg-slate-800"
+            }`}
+          >
+            Templates
+          </li>
+
+          <li
+            onClick={() => navigate("/whatsapp")}
+            className={`cursor-pointer p-3 rounded-lg ${
+              location.pathname === "/whatsapp"
+                ? "bg-green-500 text-black font-bold"
+                : "hover:bg-slate-800"
+            }`}
+          >
+            WhatsApp
+          </li>
+
+          <li
             onClick={() => navigate("/analytics")}
             className={`cursor-pointer p-3 rounded-lg ${
               location.pathname === "/analytics"
@@ -82,6 +104,17 @@ export default function Dashboard() {
             }`}
           >
             Analytics
+          </li>
+
+          <li
+            onClick={() => navigate("/profile")}
+            className={`cursor-pointer p-3 rounded-lg ${
+              location.pathname === "/profile"
+                ? "bg-green-500 text-black font-bold"
+                : "hover:bg-slate-800"
+            }`}
+          >
+            Profile
           </li>
 
           <li

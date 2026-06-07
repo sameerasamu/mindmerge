@@ -6,6 +6,7 @@ import { Routes, Route } from "react-router-dom";
 import App from "../App";
 import Dashboard from "../Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
+
 import Profile from "../pages/Profile";
 import ChangePassword from "../pages/ChangePassword";
 
@@ -13,6 +14,9 @@ import Campaigns from "../pages/Campaigns";
 import Contacts from "../pages/Contacts";
 import Analytics from "../pages/Analytics";
 import Settings from "../pages/Settings";
+
+import Templates from "../pages/Templates";
+import WhatsApp from "../pages/WhatsApp";
 
 export default function AppRoutes() {
   return (
@@ -53,10 +57,59 @@ export default function AppRoutes() {
       />
 
       {/* Sidebar Pages */}
-      <Route path="/campaigns" element={<Campaigns />} />
-      <Route path="/contacts" element={<Contacts />} />
-      <Route path="/analytics" element={<Analytics />} />
-      <Route path="/settings" element={<Settings />} />
+      <Route
+        path="/campaigns"
+        element={
+          <ProtectedRoute>
+            <Campaigns />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/contacts"
+        element={
+          <ProtectedRoute>
+            <Contacts />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/analytics"
+        element={
+          <ProtectedRoute>
+            <Analytics />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/templates"
+        element={
+          <ProtectedRoute>
+            <Templates />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/whatsapp"
+        element={
+          <ProtectedRoute>
+            <WhatsApp />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }
