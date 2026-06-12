@@ -14,6 +14,7 @@ export default function Contacts() {
     { id: 8, name: "Neha Gupta", phone: "+91 9776655443" },
     { id: 9, name: "Vikram Rao", phone: "+91 9887766554" },
     { id: 10, name: "Anjali Devi", phone: "+91 9665544332" },
+    { id: 11, name: "prasanna", phone: "+91 9665556732" },
   ];
 
   const filteredContacts = contacts.filter((contact) =>

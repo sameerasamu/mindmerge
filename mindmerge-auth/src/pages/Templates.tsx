@@ -46,6 +46,14 @@ const templates: Template[] = [
     message:
       "Hey {Name}, we miss you. Come back for an exclusive offer!",
   },
+  {
+  id: 2,
+  title: "Good Morning",
+  category: "Greeting",
+  language: "EN",
+  updated: "2026-06-12",
+  message: "Good Morning! Have a nice day."
+}
 ];
 
 export default function Templates() {
