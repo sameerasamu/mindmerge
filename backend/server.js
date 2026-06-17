@@ -5,11 +5,15 @@ require("dotenv").config();
 
 const connectDB = require("./config/db");
 
+// Scheduler
+require("./services/scheduler");
+
 const authRoutes = require("./routes/authRoutes");
 const protectedRoutes = require("./routes/protectedRoutes");
 const flowRoutes = require("./routes/flowRoutes");
 const userRoutes = require("./routes/userRoutes");
 const noteRoutes = require("./routes/noteRoutes");
+const scheduleRoutes = require("./routes/scheduleRoutes");
 
 const app = express();
 
@@ -23,6 +27,7 @@ app.use("/api", protectedRoutes);
 app.use("/api/flows", flowRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/notes", noteRoutes);
+app.use("/api/schedule", scheduleRoutes);
 
 // Test Route
 app.get("/", (req, res) => {
