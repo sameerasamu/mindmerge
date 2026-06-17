@@ -6,7 +6,6 @@ import { Routes, Route } from "react-router-dom";
 import App from "../App";
 import Dashboard from "../Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
-
 import Profile from "../pages/Profile";
 import ChangePassword from "../pages/ChangePassword";
 
@@ -17,7 +16,7 @@ import Settings from "../pages/Settings";
 
 import Templates from "../pages/Templates";
 import WhatsApp from "../pages/WhatsApp";
-
+import Reports from "../pages/Reports";
 export default function AppRoutes() {
   return (
     <Routes>
@@ -110,6 +109,14 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+  path="/reports"
+  element={
+    <ProtectedRoute>
+      <Reports />
+    </ProtectedRoute>
+  }
+/>
     </Routes>
   );
 }
