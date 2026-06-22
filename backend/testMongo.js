@@ -1,7 +1,8 @@
+require("dotenv").config();
+
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
-const uri =
-  "mongodb+srv://dbsana:mindmerge123@cluster0.nkbnau2.mongodb.net/?appName=Cluster0";
+const uri = process.env.MONGO_URI;
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -15,10 +16,12 @@ async function run() {
   try {
     await client.connect();
     await client.db("admin").command({ ping: 1 });
-    console.log("MongoDB Connected Successfully!");
+    console.log("✅ Pinged your deployment. You successfully connected to MongoDB!");
+  } catch (error) {
+    console.error("❌ Connection Error:", error);
   } finally {
     await client.close();
   }
 }
 
-run().catch(console.error);
+run();
