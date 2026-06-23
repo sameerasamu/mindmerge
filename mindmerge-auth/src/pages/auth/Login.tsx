@@ -1,4 +1,25 @@
+import { useState } from "react";
+import { loginUser } from "../../api/authApi";
+
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+    try {
+      const data = await loginUser(email, password);
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        alert("Login Successful");
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      alert("Server Error");
+    }
+  };
+
   return (
     <div
       style={{
@@ -82,6 +103,8 @@ export default function Login() {
           <input
             type="email"
             placeholder="you@company.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             style={{
               width: "100%",
               padding: "12px",
@@ -92,6 +115,8 @@ export default function Login() {
           <input
             type="password"
             placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             style={{
               width: "100%",
               padding: "12px",
@@ -108,6 +133,7 @@ export default function Login() {
           <br />
 
           <button
+            onClick={handleLogin}
             style={{
               width: "100%",
               padding: "15px",
@@ -116,6 +142,7 @@ export default function Login() {
               color: "white",
               fontSize: "18px",
               borderRadius: "8px",
+              cursor: "pointer",
             }}
           >
             Sign In
