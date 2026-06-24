@@ -8,47 +8,91 @@ const connectDB = require("./config/db");
 // Scheduler
 require("./services/scheduler");
 
-// Routes
-const authRoutes = require("./routes/authRoutes");
-const protectedRoutes = require("./routes/protectedRoutes");
-const flowRoutes = require("./routes/flowRoutes");
-const userRoutes = require("./routes/userRoutes");
-const noteRoutes = require("./routes/noteRoutes");
-const scheduleRoutes = require("./routes/scheduleRoutes");
-const changePasswordRoutes = require("./routes/changePasswordRoutes");
-const settingsRoutes = require("./routes/settingsRoutes");
-const contactRoutes = require("./routes/contactRoutes");
-const templateRoutes = require("./routes/templateRoutes");
-
 const app = express();
 
-// Middleware
+// ====================== Middleware ======================
 app.use(cors());
 app.use(express.json());
 
-// Routes
+// ====================== Route Imports ======================
+
+// Authentication
+const authRoutes = require("./routes/authRoutes");
+
+// Protected Routes
+const protectedRoutes = require("./routes/protectedRoutes");
+
+// Users
+const userRoutes = require("./routes/userRoutes");
+
+// Notes
+const noteRoutes = require("./routes/noteRoutes");
+
+// Flows
+const flowRoutes = require("./routes/flowRoutes");
+
+// Schedule
+const scheduleRoutes = require("./routes/scheduleRoutes");
+
+// Contacts
+const contactRoutes = require("./routes/contactRoutes");
+
+// Campaigns
+const campaignRoutes = require("./routes/campaignRoutes");
+
+// Templates
+const templateRoutes = require("./routes/templateRoutes");
+
+// Change Password
+const changePasswordRoutes = require("./routes/changePasswordRoutes");
+
+// Settings
+const settingsRoutes = require("./routes/settingsRoutes");
+
+// Analytics
+const analyticsRoutes = require("./routes/analyticsRoutes");
+
+// Reports
+const reportRoutes = require("./routes/reportRoutes");
+
+// WhatsApp
+const whatsappRoutes = require("./routes/whatsappRoutes");
+
+// ====================== API Routes ======================
+
 app.use("/api/auth", authRoutes);
 app.use("/api", protectedRoutes);
-app.use("/api/flows", flowRoutes);
+
 app.use("/api/users", userRoutes);
 app.use("/api/notes", noteRoutes);
+app.use("/api/flows", flowRoutes);
 app.use("/api/schedule", scheduleRoutes);
-app.use("/api/change-password", changePasswordRoutes);
-app.use("/api/settings", settingsRoutes);
+
 app.use("/api/contacts", contactRoutes);
+app.use("/api/campaigns", campaignRoutes);
 app.use("/api/templates", templateRoutes);
 
-// Test Route
+app.use("/api/change-password", changePasswordRoutes);
+app.use("/api/settings", settingsRoutes);
+
+app.use("/api/analytics", analyticsRoutes);
+app.use("/api/reports", reportRoutes);
+app.use("/api/whatsapp", whatsappRoutes);
+
+// ====================== Home Route ======================
+
 app.get("/", (req, res) => {
-  res.send("Backend Running");
+  res.send("🚀 MindMerge Backend Running Successfully");
 });
 
-// Database Connection
+// ====================== Database ======================
+
 connectDB();
 
-// Server
+// ====================== Server ======================
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
