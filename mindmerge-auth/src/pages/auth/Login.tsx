@@ -1,21 +1,31 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../api/authApi";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      alert("Please enter email and password");
+      return;
+    }
+
     try {
       const data = await loginUser(email, password);
 
       if (data.token) {
         localStorage.setItem("token", data.token);
         alert("Login Successful");
+        navigate("/dashboard");
       } else {
-        alert(data.message);
+        alert(data.message || "Invalid Credentials");
       }
     } catch (error) {
+      console.log(error);
       alert("Server Error");
     }
   };
@@ -33,8 +43,7 @@ export default function Login() {
       <div
         style={{
           flex: 1,
-          background:
-            "linear-gradient(135deg,#10b981,#3b82f6,#a855f7)",
+          background: "linear-gradient(135deg,#10b981,#3b82f6,#a855f7)",
           padding: "50px",
           display: "flex",
           flexDirection: "column",
@@ -53,8 +62,7 @@ export default function Login() {
         </h1>
 
         <p style={{ fontSize: "20px" }}>
-          Reach millions of customers with templates,
-          scheduling and analytics.
+          Reach millions of customers with templates, scheduling and analytics.
         </p>
       </div>
 
@@ -109,6 +117,7 @@ export default function Login() {
               width: "100%",
               padding: "12px",
               marginBottom: "10px",
+              borderRadius: "8px",
             }}
           />
 
@@ -121,12 +130,13 @@ export default function Login() {
               width: "100%",
               padding: "12px",
               marginBottom: "10px",
+              borderRadius: "8px",
             }}
           />
 
           <label>
             <input type="checkbox" />
-            Remember me
+            {" "}Remember me
           </label>
 
           <br />
@@ -149,7 +159,18 @@ export default function Login() {
           </button>
 
           <p style={{ marginTop: "20px" }}>
-            Don't have an account? Sign Up
+            Don't have an account?
+            <span
+              onClick={() => navigate("/signup")}
+              style={{
+                color: "#10b981",
+                cursor: "pointer",
+                marginLeft: "5px",
+                fontWeight: "bold",
+              }}
+            >
+              Sign Up
+            </span>
           </p>
         </div>
       </div>

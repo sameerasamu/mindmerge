@@ -1,9 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getProfile } from "../../api/userApi";
 
 export default function Profile() {
   const [avatar, setAvatar] = useState(
     "https://via.placeholder.com/120"
   );
+
+  const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    role: "",
+  });
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        if (!token) return;
+
+        const data = await getProfile(token);
+
+        setProfile({
+          name: data.user?.name || "",
+          email: data.user?.email || "",
+          role: data.user?.role || "",
+        });
+      } catch (error) {
+        console.log(error);
+        alert("Failed to load profile");
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const handleImageChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -43,7 +73,7 @@ export default function Profile() {
           <label className="block mb-2">Full Name</label>
           <input
             type="text"
-            value="Sameera"
+            value={profile.name}
             className="w-full p-3 rounded bg-slate-800"
             readOnly
           />
@@ -53,7 +83,7 @@ export default function Profile() {
           <label className="block mb-2">Email</label>
           <input
             type="email"
-            value="sameera@example.com"
+            value={profile.email}
             className="w-full p-3 rounded bg-slate-800"
             readOnly
           />
@@ -63,7 +93,7 @@ export default function Profile() {
           <label className="block mb-2">Role</label>
           <input
             type="text"
-            value={localStorage.getItem("role") || ""}
+            value={profile.role}
             className="w-full p-3 rounded bg-slate-800"
             readOnly
           />
