@@ -8,12 +8,17 @@ const connectDB = require("./config/db");
 // Scheduler
 require("./services/scheduler");
 
+// Routes
 const authRoutes = require("./routes/authRoutes");
 const protectedRoutes = require("./routes/protectedRoutes");
 const flowRoutes = require("./routes/flowRoutes");
 const userRoutes = require("./routes/userRoutes");
 const noteRoutes = require("./routes/noteRoutes");
 const scheduleRoutes = require("./routes/scheduleRoutes");
+const changePasswordRoutes = require("./routes/changePasswordRoutes");
+const settingsRoutes = require("./routes/settingsRoutes");
+const contactRoutes = require("./routes/contactRoutes");
+const templateRoutes = require("./routes/templateRoutes");
 
 const app = express();
 
@@ -28,6 +33,10 @@ app.use("/api/flows", flowRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/notes", noteRoutes);
 app.use("/api/schedule", scheduleRoutes);
+app.use("/api/change-password", changePasswordRoutes);
+app.use("/api/settings", settingsRoutes);
+app.use("/api/contacts", contactRoutes);
+app.use("/api/templates", templateRoutes);
 
 // Test Route
 app.get("/", (req, res) => {
