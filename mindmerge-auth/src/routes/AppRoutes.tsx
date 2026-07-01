@@ -3,8 +3,8 @@ import ForgotPassword from "../pages/auth/ForgotPassword";
 import VerifyOTP from "../pages/auth/VerifyOTP";
 import ResetPassword from "../pages/auth/ResetPassword";
 import { Routes, Route } from "react-router-dom";
-import App from "../App";
-import Dashboard from "../Dashboard";
+import Login from "../pages/auth/Login";
+import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import Profile from "../pages/Profile";
 import ChangePassword from "../pages/ChangePassword";
@@ -21,7 +21,8 @@ export default function AppRoutes() {
   return (
     <Routes>
       {/* Auth Pages */}
-      <Route path="/" element={<App />} />
+      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/verify-otp" element={<VerifyOTP />} />

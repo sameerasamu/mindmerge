@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { getProfile } from "../../api/userApi";
+import { getProfile } from "../api/userApi";
 
 export default function Profile() {
+  const token = localStorage.getItem("token");
+
   const [avatar, setAvatar] = useState(
     "https://via.placeholder.com/120"
   );
@@ -12,28 +14,60 @@ export default function Profile() {
     role: "",
   });
 
-  const token = localStorage.getItem("token");
-
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        if (!token) return;
-
-        const data = await getProfile(token);
-
-        setProfile({
-          name: data.user?.name || "",
-          email: data.user?.email || "",
-          role: data.user?.role || "",
-        });
-      } catch (error) {
-        console.log(error);
-        alert("Failed to load profile");
-      }
-    };
-
-    fetchProfile();
+    loadProfile();
   }, []);
+
+  const loadProfile = async () => {
+    try {
+      if (!token) return;
+
+      const data = await getProfile(token);
+
+      setProfile({
+        name: data.name || "",
+        email: data.email || "",
+        role: data.role || "User",
+      });
+    } catch (error) {
+      console.log(error);
+      alert("Failed to load profile");
+    }
+  };
+
+  const updateProfile = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:5000/api/users/profile",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name: profile.name,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Profile Updated Successfully");
+        setProfile({
+          name: data.name,
+          email: data.email,
+          role: data.role || "User",
+        });
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Failed to update profile");
+    }
+  };
 
   const handleImageChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -47,64 +81,88 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white p-8">
+
       <h1 className="text-4xl font-bold mb-8">
         My Profile
       </h1>
 
-      {/* Avatar */}
-      <div className="mb-8 flex flex-col items-center">
+      <div className="flex flex-col items-center mb-8">
+
         <img
           src={avatar}
           alt="Profile"
-          className="w-32 h-32 rounded-full mb-4 object-cover"
+          className="w-32 h-32 rounded-full object-cover mb-4"
         />
 
         <input
           type="file"
           accept="image/*"
           onChange={handleImageChange}
-          className="text-white"
         />
+
       </div>
 
-      {/* Profile Details */}
       <div className="bg-slate-900 p-6 rounded-xl max-w-2xl">
+
         <div className="mb-6">
-          <label className="block mb-2">Full Name</label>
+
+          <label className="block mb-2">
+            Full Name
+          </label>
+
           <input
             type="text"
             value={profile.name}
+            onChange={(e) =>
+              setProfile({
+                ...profile,
+                name: e.target.value,
+              })
+            }
             className="w-full p-3 rounded bg-slate-800"
-            readOnly
           />
+
         </div>
 
         <div className="mb-6">
-          <label className="block mb-2">Email</label>
+
+          <label className="block mb-2">
+            Email
+          </label>
+
           <input
             type="email"
             value={profile.email}
-            className="w-full p-3 rounded bg-slate-800"
             readOnly
+            className="w-full p-3 rounded bg-slate-800"
           />
+
         </div>
 
         <div className="mb-6">
-          <label className="block mb-2">Role</label>
+
+          <label className="block mb-2">
+            Role
+          </label>
+
           <input
             type="text"
             value={profile.role}
-            className="w-full p-3 rounded bg-slate-800"
             readOnly
+            className="w-full p-3 rounded bg-slate-800"
           />
+
         </div>
 
-        <button className="bg-green-500 text-black px-6 py-3 rounded font-bold">
-          Update Profile
+        <button
+          onClick={updateProfile}
+          className="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-bold"
+        >
+          Save Changes
         </button>
 
-        {/* Subscription */}
         <div className="mt-8 bg-slate-800 p-4 rounded-lg">
+
           <h2 className="text-xl font-bold mb-2">
             Subscription
           </h2>
@@ -112,10 +170,11 @@ export default function Profile() {
           <p>Plan: Premium</p>
           <p>Status: Active</p>
           <p>Renewal Date: 31 Dec 2026</p>
+
         </div>
 
-        {/* Active Sessions */}
         <div className="mt-8 bg-slate-800 p-4 rounded-lg">
+
           <h2 className="text-xl font-bold mb-2">
             Active Sessions
           </h2>
@@ -123,8 +182,11 @@ export default function Profile() {
           <p>Chrome - Windows</p>
           <p>Edge - Windows</p>
           <p>Mobile Device</p>
+
         </div>
+
       </div>
+
     </div>
   );
 }

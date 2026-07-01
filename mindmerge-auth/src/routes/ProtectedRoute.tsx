@@ -5,10 +5,10 @@ export default function ProtectedRoute({
 }: {
   children: React.ReactNode;
 }) {
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const token = localStorage.getItem("token");
 
-  if (!isLoggedIn) {
-    return <Navigate to="/" />;
+  if (!token) {
+    return <Navigate to="/login" />;
   }
 
   return <>{children}</>;

@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../api/authApi";
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 
 export default function Login() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] =
+    useState(false);
+
+  const [loading, setLoading] =
+    useState(false);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -15,165 +21,271 @@ export default function Login() {
     }
 
     try {
-      const data = await loginUser(email, password);
+      setLoading(true);
+
+      const data = await loginUser(
+        email,
+        password
+      );
 
       if (data.token) {
-        localStorage.setItem("token", data.token);
-        alert("Login Successful");
+        localStorage.setItem(
+          "token",
+          data.token
+        );
+
+        localStorage.setItem(
+          "isLoggedIn",
+          "true"
+        );
+
+        if (data.user) {
+          localStorage.setItem(
+            "role",
+            data.user.role || "User"
+          );
+
+          localStorage.setItem(
+            "name",
+            data.user.name || ""
+          );
+
+          localStorage.setItem(
+            "email",
+            data.user.email || ""
+          );
+        }
+
         navigate("/dashboard");
       } else {
-        alert(data.message || "Invalid Credentials");
+        alert(
+          data.message ||
+            "Invalid Credentials"
+        );
       }
     } catch (error) {
       console.log(error);
+
       alert("Server Error");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        height: "100vh",
-        backgroundColor: "#020817",
-        color: "white",
-      }}
-    >
-      {/* Left Side */}
-      <div
-        style={{
-          flex: 1,
-          background: "linear-gradient(135deg,#10b981,#3b82f6,#a855f7)",
-          padding: "50px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
-      >
-        <h2>💬 MindMerge WAFlow</h2>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 flex">
 
-        <h1
-          style={{
-            fontSize: "50px",
-            marginTop: "80px",
-          }}
-        >
-          Send beautiful WhatsApp campaigns at scale.
-        </h1>
+      {/* LEFT PANEL */}
 
-        <p style={{ fontSize: "20px" }}>
-          Reach millions of customers with templates, scheduling and analytics.
+      <div className="hidden lg:flex w-1/2 flex-col justify-center px-20">
+
+        <div className="inline-flex items-center gap-3 mb-10">
+
+          <div className="w-14 h-14 rounded-2xl bg-green-500 flex items-center justify-center text-2xl">
+            💬
+          </div>
+
+          <div>
+
+            <h1 className="text-4xl font-bold text-white">
+              MindMerge
+            </h1>
+
+            <p className="text-gray-400">
+              WhatsApp Marketing Platform
+            </p>
+
+          </div>
+
+        </div>
+
+        <h2 className="text-6xl font-extrabold leading-tight text-white">
+
+          Grow your business
+
+          <span className="text-green-400">
+            {" "}
+            with WhatsApp
+          </span>
+
+        </h2>
+
+        <p className="text-gray-300 text-xl mt-8 leading-9">
+
+          Create campaigns, schedule messages,
+          manage contacts, monitor reports,
+          and automate conversations from one
+          powerful dashboard.
+
         </p>
+
+        <div className="grid grid-cols-2 gap-6 mt-16">
+
+          <div className="bg-slate-900/60 border border-slate-700 rounded-2xl p-6">
+
+            <h3 className="text-3xl font-bold text-green-400">
+              10K+
+            </h3>
+
+            <p className="text-gray-300 mt-2">
+              Messages Delivered
+            </p>
+
+          </div>
+
+          <div className="bg-slate-900/60 border border-slate-700 rounded-2xl p-6">
+
+            <h3 className="text-3xl font-bold text-blue-400">
+              99%
+            </h3>
+
+            <p className="text-gray-300 mt-2">
+              Delivery Rate
+            </p>
+
+          </div>
+
+        </div>
+
       </div>
+            {/* RIGHT PANEL */}
 
-      {/* Right Side */}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <div
-          style={{
-            width: "450px",
-          }}
-        >
-          <h1>Welcome Back</h1>
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
 
-          <p>Sign in to your MindMerge account</p>
+        <div className="w-full max-w-md bg-slate-900/70 backdrop-blur-xl border border-slate-700 rounded-3xl shadow-2xl p-10">
 
-          <br />
+          <h2 className="text-4xl font-bold text-white mb-2">
+            Welcome Back 👋
+          </h2>
 
-          <button
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "10px",
-            }}
-          >
-            Login with Google
-          </button>
+          <p className="text-gray-400 mb-10">
+            Sign in to continue to your MindMerge dashboard.
+          </p>
 
-          <button
-            style={{
-              width: "100%",
-              padding: "12px",
-            }}
-          >
-            Login with GitHub
-          </button>
+          {/* Email */}
 
-          <br />
-          <br />
+          <div className="mb-6">
 
-          <input
-            type="email"
-            placeholder="you@company.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "10px",
-              borderRadius: "8px",
-            }}
-          />
+            <label className="text-gray-300 mb-2 block">
+              Email Address
+            </label>
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "10px",
-              borderRadius: "8px",
-            }}
-          />
+            <div className="flex items-center bg-slate-800 rounded-xl border border-slate-700 px-4">
 
-          <label>
-            <input type="checkbox" />
-            {" "}Remember me
-          </label>
+              <Mail className="text-gray-400" size={20} />
 
-          <br />
-          <br />
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) =>
+                  setEmail(e.target.value)
+                }
+                className="w-full bg-transparent outline-none text-white px-3 py-4"
+              />
+
+            </div>
+
+          </div>
+
+          {/* Password */}
+
+          <div className="mb-4">
+
+            <label className="text-gray-300 mb-2 block">
+              Password
+            </label>
+
+            <div className="flex items-center bg-slate-800 rounded-xl border border-slate-700 px-4">
+
+              <Lock className="text-gray-400" size={20} />
+
+              <input
+                type={
+                  showPassword
+                    ? "text"
+                    : "password"
+                }
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) =>
+                  setPassword(e.target.value)
+                }
+                className="w-full bg-transparent outline-none text-white px-3 py-4"
+              />
+
+              <button
+                type="button"
+                onClick={() =>
+                  setShowPassword(
+                    !showPassword
+                  )
+                }
+                className="text-gray-400 hover:text-white"
+              >
+                {showPassword ? (
+                  <EyeOff size={20} />
+                ) : (
+                  <Eye size={20} />
+                )}
+              </button>
+
+            </div>
+
+          </div>
+
+          <div className="flex justify-between items-center mb-8">
+
+            <label className="flex items-center gap-2 text-gray-300">
+
+              <input
+                type="checkbox"
+                className="accent-green-500"
+              />
+
+              Remember Me
+
+            </label>
+
+            <button
+              onClick={() =>
+                navigate("/forgot-password")
+              }
+              className="text-green-400 hover:text-green-300 font-medium"
+            >
+              Forgot Password?
+            </button>
+
+          </div>
 
           <button
             onClick={handleLogin}
-            style={{
-              width: "100%",
-              padding: "15px",
-              backgroundColor: "#10b981",
-              border: "none",
-              color: "white",
-              fontSize: "18px",
-              borderRadius: "8px",
-              cursor: "pointer",
-            }}
+            disabled={loading}
+            className="w-full bg-green-500 hover:bg-green-600 transition py-4 rounded-xl text-lg font-bold text-black disabled:opacity-50"
           >
-            Sign In
+            {loading
+              ? "Signing In..."
+              : "Sign In"}
           </button>
 
-          <p style={{ marginTop: "20px" }}>
+          <div className="mt-8 text-center text-gray-400">
+
             Don't have an account?
-            <span
-              onClick={() => navigate("/signup")}
-              style={{
-                color: "#10b981",
-                cursor: "pointer",
-                marginLeft: "5px",
-                fontWeight: "bold",
-              }}
+
+            <button
+              onClick={() =>
+                navigate("/signup")
+              }
+              className="ml-2 text-green-400 hover:text-green-300 font-semibold"
             >
-              Sign Up
-            </span>
-          </p>
-        </div>
+              Create Account
+            </button>
+
+          </div>
+                  </div>
+
       </div>
+
     </div>
   );
 }
